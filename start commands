@@ -8,3 +8,5 @@ sudo a2ensite todo_app.conf
 sudo systemctl reload apache2
 sudo chown -R www-data:www-data /var/www/html/todo_app
 sudo chmod -R 755 /var/www/html/todo_app
+
+python3 -c "import sys; print(sys.executable); import flask_sqlalchemy; print(flask_sqlalchemy.__file__)"
