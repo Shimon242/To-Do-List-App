@@ -2,3 +2,7 @@ sudo a2enmod wsgi
 sudo service apache2 restart
 sudo a2ensite todo_app.conf
 sudo systemctl reload apache2
+sudo a2dissite 000-default.conf
+sudo systemctl reload apache2
+sudo a2ensite todo_app.conf
+sudo systemctl reload apache2
