@@ -3,4 +3,4 @@ sudo apt install sqlite3
 sudo apt install -y curl
 curl -sS https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 python3 get-pip.py
-pip install flask flask_sqlalchemy flask_login
+python3 -m pip install flask flask_sqlalchemy flask_login
