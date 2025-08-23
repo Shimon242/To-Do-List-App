@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Your To-Do List</h2>
+<form method="POST">
+    <input type="text" name="task" placeholder="New Task">
+    <button type="submit">Add</button>
+</form>
+<ul>
+{% for task in tasks %}
+    <li>{{ task.task }}</li>
+{% endfor %}
+</ul>
+<a href="{{ url_for('logout') }}">Logout</a>
+{% endblock %}
