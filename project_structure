@@ -1,0 +1,8 @@
+todo_app/
+│── app.py
+│── models.py
+│── templates/
+│    ├── base.html
+│    ├── login.html
+│    ├── register.html
+│    └── todo.html
