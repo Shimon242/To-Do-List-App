@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'supersecretkey'   # change in production
+app.config['SECRET_KEY'] = 'supersecretkey'   # ⚠️ change in production
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///todo.db'
 
 db = SQLAlchemy(app)
@@ -22,6 +22,7 @@ class User(db.Model, UserMixin):
 class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     task = db.Column(db.String(200), nullable=False)
+    completed = db.Column(db.Boolean, default=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 @login_manager.user_loader
@@ -74,6 +75,28 @@ def todo():
     tasks = Todo.query.filter_by(user_id=current_user.id).all()
     return render_template('todo.html', tasks=tasks)
 
+@app.route('/complete/<int:task_id>')
+@login_required
+def complete(task_id):
+    task = Todo.query.get_or_404(task_id)
+    if task.owner != current_user:
+        flash("Not authorized to update this task")
+        return redirect(url_for('todo'))
+    task.completed = True
+    db.session.commit()
+    return redirect(url_for('todo'))
+
+@app.route('/delete/<int:task_id>')
+@login_required
+def delete(task_id):
+    task = Todo.query.get_or_404(task_id)
+    if task.owner != current_user:
+        flash("Not authorized to delete this task")
+        return redirect(url_for('todo'))
+    db.session.delete(task)
+    db.session.commit()
+    return redirect(url_for('todo'))
+
 @app.route('/logout')
 @login_required
 def logout():
@@ -84,3 +107,4 @@ if __name__ == "__main__":
     with app.app_context():
         db.create_all()
     app.run(debug=True)
+
